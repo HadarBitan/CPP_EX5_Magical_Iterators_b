@@ -1,4 +1,5 @@
 #include "MagicalContainer.hpp"
+#include <iostream>
 #include <algorithm>
 
 using namespace std;
@@ -83,7 +84,7 @@ using namespace ariel;
         // Equality comparison (operator==)
         bool MagicalContainer::AscendingIterator::operator==(const AscendingIterator &other) const 
         {
-            return this->myContainer->myObj[index] == other.myContainer->myObj[index];
+            return this->index == other.index;
         }
 
         // Inequality comparison (operator!=)
@@ -93,30 +94,30 @@ using namespace ariel;
         }
 
         // GT, LT comparison (operator>, operatorn<)
-        bool MagicalContainer::AscendingIterator::operator>(const AscendingIterator &other)
+        bool MagicalContainer::AscendingIterator::operator>(const AscendingIterator &other) const
         {
-            return this->myContainer->myObj[index] > other.myContainer->myObj[index];
+            return this->index > other.index;
         }
 
-        bool MagicalContainer::AscendingIterator::operator<(const AscendingIterator &other)
+        bool MagicalContainer::AscendingIterator::operator<(const AscendingIterator &other) const
         {
-            return this->myContainer->myObj[index] < other.myContainer->myObj[index];
+            return this->index < other.index;
         }
 
         // Dereference operator (operator*)
         int MagicalContainer::AscendingIterator::operator*()
         {
-            return this->myContainer->myObj[index];
+            return this->myContainer->myObj[this->index];
         }
 
         // Pre-increment operator (operator++) ++i
-        MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::operator++()
+        MagicalContainer::AscendingIterator& MagicalContainer::AscendingIterator::operator++()
         {
-            if(this->index == this->myContainer->size() - 1)
+            if(this->index >= this->myContainer->size())
             {
                 throw std::runtime_error("");
             }
-            this->index++;
+            ++this->index;
             return *this;
         }
 
@@ -144,8 +145,10 @@ using namespace ariel;
             {
                 this->myContainer = other.myContainer;
                 this->index = other.index;
+                this->crossindex = other.crossindex;
                 other.myContainer = nullptr;
                 other.index = 0;
+                other.crossindex = 0;
             }
             return *this;
         }
@@ -162,8 +165,9 @@ using namespace ariel;
             }
             if (this != &other)
             {
-                myContainer = other.myContainer;
-                index = other.index;
+                this->myContainer = other.myContainer;
+                this->index = other.index;
+                this->crossindex = other.crossindex;
             }
             return *this;
         }
@@ -171,7 +175,7 @@ using namespace ariel;
         // Equality comparison (operator==)
         bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator &other) const 
         {
-            return this->myContainer->myObj[index] == other.myContainer->myObj[index];
+           return (this->index == other.index) && (this->myContainer == other.myContainer);
         }
 
         // Inequality comparison (operator!=)
@@ -181,36 +185,38 @@ using namespace ariel;
         }
 
         // GT, LT comparison (operator>, operatorn<)
-        bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator &other)
+        bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator &other) const
         {
-            return this->myContainer->myObj[index] > other.myContainer->myObj[index];
+            return this->index > other.index;
         }
 
-        bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator &other)
+        bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator &other) const
         {
-            return this->myContainer->myObj[index] < other.myContainer->myObj[index];
+            return this->index < other.index;
         }
 
         // Dereference operator (operator*)
         int MagicalContainer::SideCrossIterator::operator*()
         {
-            return this->myContainer->myObj[index];
+            return this->myContainer->myObj[this->crossindex];
         }
 
         // Pre-increment operator (operator++) ++i
-        MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::operator++()
+        MagicalContainer::SideCrossIterator& MagicalContainer::SideCrossIterator::operator++()
         {
-            if(index == (this->myContainer->size() / 2))
+            if(this->index >= this->myContainer->size())
             {
                 throw std::runtime_error("");
             }
-            if(this->index > (this->myContainer->size() / 2))
+            if(this->crossindex > (this->myContainer->size() / 2))
             {
-                this->index = static_cast<vector<int>::size_type>(this->myContainer->size() - static_cast<int>(this->index));
+                ++this->index;
+                this->crossindex = static_cast<vector<int>::size_type>(this->myContainer->size() - static_cast<int>(this->crossindex));
             }
             else
             {
-                this->index = static_cast<vector<int>::size_type>((this->myContainer->size() - 1) - static_cast<int>(this->index));
+                ++this->index;
+                this->crossindex = static_cast<vector<int>::size_type>((this->myContainer->size() - 1) - static_cast<int>(this->crossindex));
             }
             return *this;
         }   
@@ -225,7 +231,7 @@ using namespace ariel;
         MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end()
         {
             SideCrossIterator it(*myContainer);
-            it.index = myContainer->myObj.size() / 2;  // Set index to the size of the set
+            it.index = myContainer->myObj.size();  // Set index to the size of the set
             return it;
         }
 
@@ -266,7 +272,7 @@ using namespace ariel;
         // Equality comparison (operator==)
         bool MagicalContainer::PrimeIterator::operator==(const PrimeIterator &other) const 
         {
-            return this->myContainer->myObj[index] == other.myContainer->myObj[index];
+            return this->index == other.index;
         }
 
         // Inequality comparison (operator!=)
@@ -276,30 +282,30 @@ using namespace ariel;
         }
 
         // GT, LT comparison (operator>, operatorn<)
-        bool MagicalContainer::PrimeIterator::operator>(const PrimeIterator &other)
+        bool MagicalContainer::PrimeIterator::operator>(const PrimeIterator &other) const
         {
-            return this->myContainer->myObj[index] > other.myContainer->myObj[index];
+            return this->index > other.index;
         }
 
-        bool MagicalContainer::PrimeIterator::operator<(const PrimeIterator &other)
+        bool MagicalContainer::PrimeIterator::operator<(const PrimeIterator &other) const
         {
-            return this->myContainer->myObj[index] < other.myContainer->myObj[index];
+            return this->index < other.index;
         }
 
         // Dereference operator (operator*)
         int MagicalContainer::PrimeIterator::operator*()
         {
-            return this->myContainer->myPrimeObj[index];
+            return this->myContainer->myPrimeObj[this->index];
         }
 
         // Pre-increment operator (operator++) ++i
-        MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::operator++()
+        MagicalContainer::PrimeIterator& MagicalContainer::PrimeIterator::operator++()
         {
-            if(this->index == (this->myContainer->myPrimeObj.size()))
+            if(this->index >= (this->myContainer->myPrimeObj.size()))
             {
                 throw std::runtime_error("");
             }
-            this->index++;
+            ++this->index;
             return *this;
         }
 
@@ -312,8 +318,8 @@ using namespace ariel;
         // end(type)
         MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::end()
         {
-            PrimeIterator it(*myContainer);
-            it.index = myContainer->myObj.size();  // Set index to the size of the set
+            PrimeIterator it(*this->myContainer);
+            it.index = myContainer->myPrimeObj.size();  // Set index to the size of the set
             return it;
         }
 

@@ -3,19 +3,17 @@
 
 #pragma once
 
-#include <iostream>
 #include <vector>
 #include <string>
 
-using namespace std;
 
 namespace ariel
 {
     class MagicalContainer
     {
     private:
-        vector<int> myObj;
-        vector<int> myPrimeObj;
+        std::vector<int> myObj;
+        std::vector<int> myPrimeObj;
         bool isPrime(int num);
         
     public:
@@ -28,7 +26,7 @@ namespace ariel
         {
         private:
             MagicalContainer* myContainer;
-            vector<int>::size_type index;
+            std::vector<int>::size_type index;
 
         public:
             // constructor
@@ -59,14 +57,14 @@ namespace ariel
             bool operator!=(const AscendingIterator &other) const;
 
             // GT, LT comparison (operator>, operatorn<)
-            bool operator>(const AscendingIterator &other);
-            bool operator<(const AscendingIterator &other);
+            bool operator>(const AscendingIterator &other) const;
+            bool operator<(const AscendingIterator &other) const;
 
             // Dereference operator (operator*)
             int operator*();
 
             // Pre-increment operator (operator++) ++i
-            AscendingIterator operator++();
+            AscendingIterator& operator++();
             // begin(type)
             AscendingIterator begin();
 
@@ -78,23 +76,23 @@ namespace ariel
         {
         private:
             MagicalContainer* myContainer;
-            vector<int>::size_type index;
-
+            std::vector<int>::size_type crossindex;
+            std::vector<int>::size_type index;
         public:
             // constructor
-            SideCrossIterator(MagicalContainer &ptr) : myContainer(&ptr), index(0) {}
+            SideCrossIterator(MagicalContainer &ptr) : myContainer(&ptr), index(0), crossindex(0) {}
 
             // Default constructor
-            SideCrossIterator() : myContainer(nullptr), index(0) {}
+            SideCrossIterator() : myContainer(nullptr), index(0), crossindex(0) {}
 
             // Copy constructor
-            SideCrossIterator(const SideCrossIterator &other): myContainer(other.myContainer), index(other.index){}
+            SideCrossIterator(const SideCrossIterator &other): myContainer(other.myContainer), index(other.index), crossindex(other.crossindex) {}
 
             //move assignment operator
             SideCrossIterator &operator=(SideCrossIterator &&other) noexcept;
 
             //move constructor
-            SideCrossIterator(SideCrossIterator&& other) noexcept : myContainer(other.myContainer), index(0) {}
+            SideCrossIterator(SideCrossIterator&& other) noexcept : myContainer(other.myContainer), index(0), crossindex(0) {}
 
             // Destructor
             ~SideCrossIterator();
@@ -109,14 +107,14 @@ namespace ariel
             bool operator!=(const SideCrossIterator &other) const;
 
             // GT, LT comparison (operator>, operatorn<)
-            bool operator>(const SideCrossIterator &other);
-            bool operator<(const SideCrossIterator &other);
+            bool operator>(const SideCrossIterator &other) const;
+            bool operator<(const SideCrossIterator &other) const;
 
             // Dereference operator (operator*)
             int operator*();
 
             // Pre-increment operator (operator++) ++i
-            SideCrossIterator operator++();
+            SideCrossIterator& operator++();
 
             // begin(type)
             SideCrossIterator begin();
@@ -129,7 +127,7 @@ namespace ariel
         {
         private:
             MagicalContainer* myContainer;
-            vector<int>::size_type index;
+            std::vector<int>::size_type index;
 
         public:
             // constructor
@@ -160,14 +158,14 @@ namespace ariel
             bool operator!=(const PrimeIterator &other) const;
 
             // GT, LT comparison (operator>, operatorn<)
-            bool operator>(const PrimeIterator &other);
-            bool operator<(const PrimeIterator &other);
+            bool operator>(const PrimeIterator &other) const;
+            bool operator<(const PrimeIterator &other) const;
 
             // Dereference operator (operator*)
             int operator*();
 
             // Pre-increment operator (operator++) ++i
-            PrimeIterator operator++();
+            PrimeIterator& operator++();
 
             // begin(type)
             PrimeIterator begin();
